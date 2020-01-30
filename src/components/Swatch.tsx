@@ -1,8 +1,13 @@
 import React from 'react';
 
-const Swatch = () => {
+interface Props {
+    newColor: string
+}
+
+const Swatch = (Props: any) => {
+    console.log(Props.newColor)
     return (
-        <div className='swatch-square'></div>
+        <div className='swatch-square' style={{backgroundColor: Props.newColor}} />
     )
 }
 
