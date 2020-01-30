@@ -1,14 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import "./App.css";
 
 import Swatch from "./components/Swatch";
 import Slider from "./components/Slider";
+
+interface hslaColor {
+  hue: string,
+  saturation: string,
+  light: string,
+  alpha: string
+}
+
+const initialState: hslaColor = {
+  hue: "204",
+  saturation: "100",
+  light: "50",
+  alpha: "1"
+
+}
 
 const App = () => {
   const [hue, setHue] = useState<string>("204");
   const [saturation, setSaturation] = useState<string>("100");
   const [light, setLight] = useState<string>("50");
   const [alpha, setAlpha] = useState<string>("1");
+
+  console.log(initialState)
+
+  const hslaReducer = ({ initialState, action }: { initialState: State; action: Action; }) => {
+    switch (action.type) {
+      case 'SAT':
+        return ({...initialState, sat: action.payload})
+    }
+  }
+
+
+
+  // const hslaReducer = (hsla, action) => {
+  //   switch (action.type) {
+  //     case 'SAT':
+  //       return hsla.map((color: any) => ({...color, saturation: action.payload}))
+  //     default:
+  //       return hsla
+  //   }
+  // }
+  //   const [hsla, hslaDispatch] = useReducer(hslaReducer, initialState)
+  //   console.log(hsla)
 
   const changeInput = (
     e: React.ChangeEvent<HTMLInputElement>,
