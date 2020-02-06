@@ -1,69 +1,52 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 import "./App.css";
 
 import Swatch from "./components/Swatch";
 import Slider from "./components/Slider";
 
-interface hslaColor {
+interface State {
   hue: string,
-  saturation: string,
-  light: string,
-  alpha: string
+  sat: string,
+  light: string
+}
+interface Action { 
+  type: string
+  payload: string
+
 }
 
-const initialState: hslaColor = {
-  hue: "204",
-  saturation: "100",
-  light: "50",
-  alpha: "1"
-
+const initialState = {
+  hue: '250',
+  sat: '100',
+  light: '50'
+}
+const colorReducer = (state:State, action:Action) => {
+  switch (action.type) {
+    case 'HUE':
+      return {...state, hue: action.payload}
+    case 'SAT':
+      return {...state, sat: action.payload}
+    case 'LIGHT':
+      return {...state, light: action.payload}
+    default:
+      return {...state}
+  }
 }
 
 const App = () => {
-  const [hue, setHue] = useState<string>("204");
-  const [saturation, setSaturation] = useState<string>("100");
-  const [light, setLight] = useState<string>("50");
-  const [alpha, setAlpha] = useState<string>("1");
+  // const [hue, setHue] = useState<string>("204");
+  // const [saturation, setSaturation] = useState<string>("100");
+  // const [light, setLight] = useState<string>("50");
+  // const [alpha, setAlpha] = useState<string>("1");
+  const [state, dispatch] = useReducer(colorReducer, initialState)
 
-  console.log(initialState)
 
-  const hslaReducer = ({ initialState, action }: { initialState: State; action: Action; }) => {
-    switch (action.type) {
-      case 'SAT':
-        return ({...initialState, sat: action.payload})
-    }
+  const newColor: string = state ? `hsl(${state.hue}, ${state.sat}%, ${state.light}%)` : 'hsl(100, 100%, 50%)';
+
+  const onSliderChange = (e:any, type:string) => {
+    const value = e.target.value 
+    dispatch({ type: type, payload: value})
   }
-
-
-
-  // const hslaReducer = (hsla, action) => {
-  //   switch (action.type) {
-  //     case 'SAT':
-  //       return hsla.map((color: any) => ({...color, saturation: action.payload}))
-  //     default:
-  //       return hsla
-  //   }
-  // }
-  //   const [hsla, hslaDispatch] = useReducer(hslaReducer, initialState)
-  //   console.log(hsla)
-
-  const changeInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    slider: string
-  ): void => {
-    const value: string = e.target.value;
-    if (slider === "saturation") {
-      setSaturation(value);
-    } else if (slider === "hue") {
-      setHue(value);
-    } else if (slider === "light") {
-      setLight(value);
-    } else if (slider === "alpha") {
-      setAlpha(value);
-    }
-  };
-
-  const newColor: string = `hsla(${hue}, ${saturation}%, ${light}%, ${alpha})`;
 
   return (
     <div className="App">
@@ -71,10 +54,9 @@ const App = () => {
         <h1>Typescript Color Picker</h1>
       </header>
       <Swatch newColor={newColor}/>
-      <Slider changeInput={changeInput} sliderType={"hue"} max="360" value={hue} />
-      <Slider changeInput={changeInput} sliderType={"saturation"} max="100" value={saturation} />
-      <Slider changeInput={changeInput} sliderType={"light"} max="100" value={light} />
-      <Slider changeInput={changeInput} sliderType={"alpha"} max="1" value={alpha} />
+      <Slider changeInput={onSliderChange} sliderType={"HUE"} max="360" value={state.hue} />
+      <Slider changeInput={onSliderChange} sliderType={"SAT"} max="100" value={state.sat} /> 
+      <Slider changeInput={onSliderChange} sliderType={"LIGHT"} max="100" value={state.light} />
 
     </div>
   );
