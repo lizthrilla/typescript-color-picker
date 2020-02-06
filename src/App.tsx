@@ -35,9 +35,6 @@ const colorReducer = (state:State, action:Action) => {
 
 const App = () => {
   // const [hue, setHue] = useState<string>("204");
-  // const [saturation, setSaturation] = useState<string>("100");
-  // const [light, setLight] = useState<string>("50");
-  // const [alpha, setAlpha] = useState<string>("1");
   const [state, dispatch] = useReducer(colorReducer, initialState)
 
 
